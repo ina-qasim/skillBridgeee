@@ -12,16 +12,18 @@ function App() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
 
+  // Add course to enrolled list
   const handleEnroll = (course) => {
     setEnrolledCourses((prev) => {
-      if (prev.find(c => c.id === course.id)) return prev; // prevent duplicates
+      if (prev.find((c) => c.id === course.id)) return prev;
       return [...prev, course];
     });
   };
 
+  // Set selected course and navigate to Course page
   const handleCourseClick = (course) => {
     setSelectedCourse(course);
-    setPage("course");
+    setPage("Course"); // must match the App.jsx render
   };
 
   return (
@@ -30,28 +32,70 @@ function App() {
 
       {page === "dashboard" && (
         <>
-          <Navbar username={user ? user.name : "Demo User"} onNavigate={setPage} activePage={page} />
-          <Dashboard setPage={setPage} user={user} enrolledCourses={enrolledCourses} />
+          <Navbar
+            username={user ? user.name : "Demo User"}
+            onNavigate={setPage}
+            activePage={page}
+          />
+          <Dashboard
+            setPage={setPage}
+            user={user}
+            enrolledCourses={enrolledCourses}
+          />
         </>
       )}
 
       {page === "courses" && (
         <>
-          <Navbar username={user ? user.name : "Demo User"} onNavigate={setPage} activePage={page} />
-          <Courses setPage={setPage} onCourseClick={handleCourseClick} onEnroll={handleEnroll} />
+          <Navbar
+            username={user ? user.name : "Demo User"}
+            onNavigate={setPage}
+            activePage={page}
+          />
+          <Courses
+            onCourseClick={handleCourseClick}
+            onEnroll={(course) => {
+              handleEnroll(course);
+              handleCourseClick(course);
+            }}
+          />
         </>
       )}
 
-      {page === "course" && (
+      {page === "Course" && (
         <>
-          <Navbar username={user ? user.name : "Demo User"} onNavigate={setPage} activePage={page} />
-          <Course course={selectedCourse} setPage={setPage} onEnroll={(c) => { handleEnroll(c); setPage("dashboard"); }} />
+          <Navbar
+            username={user ? user.name : "Demo User"}
+            onNavigate={setPage}
+            activePage={page}
+          />
+          {selectedCourse ? (
+            <Course
+              course={selectedCourse}
+              setPage={setPage}
+              onEnroll={handleEnroll}
+            />
+          ) : (
+            <div style={{ padding: "2rem", textAlign: "center" }}>
+              No course selected.
+              <button
+                className="primary-btn"
+                onClick={() => setPage("courses")}
+              >
+                Back to Courses
+              </button>
+            </div>
+          )}
         </>
       )}
 
       {page === "tasks" && (
         <>
-          <Navbar username={user ? user.name : "Demo User"} onNavigate={setPage} activePage={page} />
+          <Navbar
+            username={user ? user.name : "Demo User"}
+            onNavigate={setPage}
+            activePage={page}
+          />
           <Tasks />
         </>
       )}

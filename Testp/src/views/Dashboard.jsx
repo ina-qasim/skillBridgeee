@@ -15,7 +15,8 @@ function Dashboard({ setPage, user, enrolledCourses }) {
     <div className="page-container">
       <Header username={username} />
 
-      <div className='stats-grid'>
+      {/* Stats Section */}
+      <div className="stats-grid">
         {statusData.map((status, index) => (
           <Stats
             key={index}
@@ -27,6 +28,7 @@ function Dashboard({ setPage, user, enrolledCourses }) {
         ))}
       </div>
 
+      {/* Enrolled Courses */}
       <div className="dashboard-section">
         <h2 className="dashboard-title">Your Enrolled Courses</h2>
 
@@ -43,51 +45,48 @@ function Dashboard({ setPage, user, enrolledCourses }) {
             </button>
           </div>
         ) : (
-          <div className="courses-grid">
+          <div className="enrolled-courses-grid">
             {enrolledCourses.map((course) => (
-              <div key={course.id} className="card course-card-wrapped">
-                <img src={course.image} alt={course.title} className="course-image-full" />
-                <div className="course-card-content">
-                  <h3>{course.title}</h3>
-                  <p>{course.instructor}</p>
+              <div key={course.id} className="card enrolled-course-card">
+                {/* Course Image */}
+                <div className="hero-image-container">
+                  <img src={course.image} alt={course.title} className="hero-image" />
+                </div>
+
+                {/* Course Info */}
+                <div className="course-info-section">
+                  <h3 className="course-title-large">{course.title}</h3>
+                  <p className="course-description-text">{course.description}</p>
+
+                  <div className="course-meta-list">
+                    <div className="course-meta-item">
+                      👨‍🏫 {course.instructor || "Instructor Name"}
+                    </div>
+                    <div className="course-meta-item">
+                      ⭐ {course.rating || "N/A"}
+                    </div>
+                    <div className="course-meta-item">
+                      👥 {course.students || "N/A"}
+                    </div>
+                    <div className="course-meta-item">
+                      ⏱️ {course.duration || "N/A"}
+                    </div>
+                  </div>
+
+                  <button
+                    className="primary-btn view-course-btn"
+                    onClick={() => setPage('Course')}
+                  >
+                    View Full Course
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
-
-      <div className="dashboard-bottom">
-
-        <div className="card recent-tasks-card">
-          <h3 className="recent-tasks-title">Recent Tasks</h3>
-          <div className="divider-horizontal"></div>
-        </div>
-
-        <div className="side-actions-container">
-          <button className="primary-btn full-width-btn" onClick={() => setPage('courses')}>
-            Browse Courses
-          </button>
-
-          <button
-            className="secondary-btn"
-            onClick={() => setPage('tasks')}
-          >
-            Manage Tasks
-          </button>
-
-          <div className="card progress-card">
-            <span className="progress-label">Your learning journey</span>
-            <div className="progress-bar-container">
-              <div className="progress-bar-fill" style={{ width: '0%' }}></div>
-            </div>
-            <span className="progress-percentage-text">0% to next level</span>
-          </div>
-        </div>
-
-      </div>
     </div>
-  )
+  );
 }
 
 export default Dashboard;
