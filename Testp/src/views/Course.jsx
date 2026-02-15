@@ -75,7 +75,6 @@ function Course({ course, setPage, onEnroll }) {
                     </div>
                 </div>
 
-                {/* Sidebar */}
                 <div className="sidebar-sticky">
                     <div className="card" style={{ padding: '20px' }}>
                         <div className="price-tag">$49.99</div>

@@ -9,7 +9,6 @@ function Courses({ onCourseClick, onEnroll }) {
 
   const categories = ["all", "beauty", "fragrances", "furniture", "groceries"];
 
-  // Fetch courses
   useEffect(() => {
     setLoading(true);
 
@@ -30,7 +29,6 @@ function Courses({ onCourseClick, onEnroll }) {
       });
   }, [selectedCategory]);
 
-  // Filter by search
   useEffect(() => {
     const result = products.filter((course) =>
       course.title.toLowerCase().includes(search.toLowerCase())
@@ -38,7 +36,6 @@ function Courses({ onCourseClick, onEnroll }) {
     setFilteredProducts(result);
   }, [search, products]);
 
-  // Fake level based on rating
   const getLevel = (rating) => {
     if (rating >= 4.7) return "Advanced";
     if (rating >= 4.3) return "Intermediate";
@@ -67,7 +64,6 @@ function Courses({ onCourseClick, onEnroll }) {
         </p>
       </div>
 
-      {/* Categories */}
       <div className="categories-container">
         {categories.map((cat) => (
           <button
@@ -84,7 +80,6 @@ function Courses({ onCourseClick, onEnroll }) {
         ))}
       </div>
 
-      {/* Search */}
       <div className="search-box">
         <input
           type="text"
@@ -94,7 +89,6 @@ function Courses({ onCourseClick, onEnroll }) {
         />
       </div>
 
-      {/* Courses Grid */}
       <div className="courses-grid">
         {loading && <div className="loader">Loading...</div>}
 
@@ -129,7 +123,6 @@ function Courses({ onCourseClick, onEnroll }) {
                   <div className="course-card-footer">
                     <span className="course-rating-text">{course.rating} ★</span>
 
-                    {/* Enroll */}
                     <button
                       className="primary-btn enroll-now-btn"
                       onClick={(e) => {

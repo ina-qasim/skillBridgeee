@@ -15,7 +15,6 @@ function Dashboard({ setPage, user, enrolledCourses }) {
     <div className="page-container">
       <Header username={username} />
 
-      {/* Stats Section */}
       <div className="stats-grid">
         {statusData.map((status, index) => (
           <Stats
@@ -28,7 +27,6 @@ function Dashboard({ setPage, user, enrolledCourses }) {
         ))}
       </div>
 
-      {/* Enrolled Courses */}
       <div className="dashboard-section">
         <h2 className="dashboard-title">Your Enrolled Courses</h2>
 
@@ -48,12 +46,10 @@ function Dashboard({ setPage, user, enrolledCourses }) {
           <div className="enrolled-courses-grid">
             {enrolledCourses.map((course) => (
               <div key={course.id} className="card enrolled-course-card">
-                {/* Course Image */}
                 <div className="hero-image-container">
                   <img src={course.image} alt={course.title} className="hero-image" />
                 </div>
 
-                {/* Course Info */}
                 <div className="course-info-section">
                   <h3 className="course-title-large">{course.title}</h3>
                   <p className="course-description-text">{course.description}</p>
