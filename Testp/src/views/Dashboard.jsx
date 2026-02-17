@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import Header from "../components/Header";
 import Stats from "../components/Stats";
+import { AppContext } from "../App"; 
 
-function Dashboard({ setPage, user, enrolledCourses }) {
+function Dashboard() {
+  const { user, enrolledCourses, setPage, setSelectedCourse } = useContext(AppContext);
+
   const username = user?.name || "Demo User";
 
   const statusData = [
@@ -10,6 +14,11 @@ function Dashboard({ setPage, user, enrolledCourses }) {
     { icon: "🔥", name: "Current Streak", numb: "1", variant: "orange" },
     { icon: "📅", name: "Upcoming", numb: "0", variant: "blue" },
   ];
+
+  const handleViewCourse = (course) => {
+    setSelectedCourse(course);
+    setPage("Course"); 
+  };
 
   return (
     <div className="page-container">
@@ -71,7 +80,7 @@ function Dashboard({ setPage, user, enrolledCourses }) {
 
                   <button
                     className="primary-btn view-course-btn"
-                    onClick={() => setPage('Course')}
+                    onClick={() => handleViewCourse(course)}
                   >
                     View Full Course
                   </button>

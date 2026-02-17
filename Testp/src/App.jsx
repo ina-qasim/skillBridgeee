@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, createContext } from "react";
 import Navbar from "./components/Navbar";
 import Courses from "./views/Courses";
 import Dashboard from "./views/Dashboard";
@@ -6,13 +6,26 @@ import Tasks from "./views/Tasks";
 import Login from "./views/Login";
 import Course from "./views/Course";
 
+export const ThemeContext = createContext();
+export const AppContext = createContext();
+
 function App() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
   const [user, setUser] = useState(null);
   const [page, setPage] = useState("login");
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
 
-  // Add course to enrolled list
   const handleEnroll = (course) => {
     setEnrolledCourses((prev) => {
       if (prev.find((c) => c.id === course.id)) return prev;
@@ -20,86 +33,56 @@ function App() {
     });
   };
 
-  // Set selected course and navigate to Course page
-  const handleCourseClick = (course) => {
-    setSelectedCourse(course);
-    setPage("Course"); // must match the App.jsx render
-  };
-
   return (
-    <main className="container">
-      {page === "login" && <Login setUser={setUser} setPage={setPage} />}
+    <AppContext.Provider
+      value={{
+        user,
+        setUser,
+        page,
+        setPage,
+        selectedCourse,
+        setSelectedCourse,
+        enrolledCourses,
+        setEnrolledCourses,
+        handleEnroll,
+      }}
+    >
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <div className={theme}>
+          <main className="container">
+            {page === "login" && <Login />}
 
-      {page === "dashboard" && (
-        <>
-          <Navbar
-            username={user ? user.name : "Demo User"}
-            onNavigate={setPage}
-            activePage={page}
-          />
-          <Dashboard
-            setPage={setPage}
-            user={user}
-            enrolledCourses={enrolledCourses}
-          />
-        </>
-      )}
+            {page === "dashboard" && (
+              <>
+                <Navbar activePage="dashboard" />
+                <Dashboard />
+              </>
+            )}
 
-      {page === "courses" && (
-        <>
-          <Navbar
-            username={user ? user.name : "Demo User"}
-            onNavigate={setPage}
-            activePage={page}
-          />
-          <Courses
-            onCourseClick={handleCourseClick}
-            onEnroll={(course) => {
-              handleEnroll(course);
-              handleCourseClick(course);
-            }}
-          />
-        </>
-      )}
+            {page === "courses" && (
+              <>
+                <Navbar activePage="courses" />
+                <Courses />
+              </>
+            )}
 
-      {page === "Course" && (
-        <>
-          <Navbar
-            username={user ? user.name : "Demo User"}
-            onNavigate={setPage}
-            activePage={page}
-          />
-          {selectedCourse ? (
-            <Course
-              course={selectedCourse}
-              setPage={setPage}
-              onEnroll={handleEnroll}
-            />
-          ) : (
-            <div style={{ padding: "2rem", textAlign: "center" }}>
-              No course selected.
-              <button
-                className="primary-btn"
-                onClick={() => setPage("courses")}
-              >
-                Back to Courses
-              </button>
-            </div>
-          )}
-        </>
-      )}
+            {page === "Course" && (
+              <>
+                <Navbar activePage="Course" />
+                <Course />
+              </>
+            )}
 
-      {page === "tasks" && (
-        <>
-          <Navbar
-            username={user ? user.name : "Demo User"}
-            onNavigate={setPage}
-            activePage={page}
-          />
-          <Tasks />
-        </>
-      )}
-    </main>
+            {page === "tasks" && (
+              <>
+                <Navbar activePage="tasks" />
+                <Tasks />
+              </>
+            )}
+          </main>
+        </div>
+      </ThemeContext.Provider>
+    </AppContext.Provider>
   );
 }
 
